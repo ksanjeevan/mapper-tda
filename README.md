@@ -18,20 +18,31 @@ _Topological Data Analysis is sensitive to both large and small scale patterns t
 ### Results
 To test our implementation we take a look at a 3D point dataset of a lion (_lion_data.npy_). We can visualize the point cloud here:
 
+<p align="center">
 <img src="tests/3d.png" width="500px"/>
+</p>
 
 We apply the average L-2 distance as a filter function to our dataset and obtain the following colarization:
 
+<p align="center">
 <img src="tests/3d_coloring.png" width="500px"/>
+</p>
 
 Using an overlap of 10% and 8 bins the dataset is seperated according to the projection by the filter function. We cluster each of the intervals individually using Single Linkage Clustering, and now each cluster is represented with a node as can be seen here:
 
+<p align="center">
 <img src="tests/3d_graph.png" width="700px"/>
+</p>
 
 An edge is added between nodes if they share points in common, and thus this 3D dataset can be compressed into a graph:
 
+<p align="center">
 <img src="tests/graph.png" width="1000px"/>
+</p>
 
 We can see how the nodes are capturing the topology of the lion. For example we can clearly see that nodes 8 & 7 represent the ears, node 0 is the nose and nodes 22 & 23 the front paws. And as we can see below, node 29 is the fur of the tail with 27 & 28 being the back paws).
 
+
+<p align="center">
 <img src="tests/7.png" width="400px"/>
+</p>

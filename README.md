@@ -16,7 +16,7 @@ _Topological Data Analysis is sensitive to both large and small scale patterns t
 
 
 ### Results
-To test our implementation we take a look at a 3D point dataset of a lion (lion_data.npy). We can visualize the point cloud here:
+To test our implementation we take a look at a 3D point dataset of a lion (_lion_data.npy_). We can visualize the point cloud here:
 
 <img src="tests/3d.png" width="500px"/>
 

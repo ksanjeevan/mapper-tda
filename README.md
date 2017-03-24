@@ -30,7 +30,7 @@ Adding gaussian noise in the z dimension, we proceed use the x axis as a filter 
 <img src="result_plots/spiral_coloring.png" width="600px"/>
 </p>
 
-Following is a visualization of the overlapping binning process based on the filter function. Nearest-Neighbour chain was used for the clustering.
+Following is a visualization of the overlapping bins based on the filter function, with each getting clustered individually (using Nearest-Neighbour chain).
 
 <p align="center">
 <img src="result_plots/spirals_anim.gif" width="500px"/>

@@ -125,7 +125,7 @@ class SingleLinkageClustering(em.ClusteringTDA):
         
 
 
-class KNN(em.ClusteringTDA):
+class NNC(em.ClusteringTDA):
 
 
     def __init__(self, data):
@@ -176,7 +176,7 @@ class KNN(em.ClusteringTDA):
         return list(zip(self.c_to_ind[cluster_name], [cluster_name]*len(self.c_to_ind[cluster_name])))
 
 
-    def knn_algo(self):
+    def nnc_algo(self):
 
         cluster_name = 0
 

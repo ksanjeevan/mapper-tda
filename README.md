@@ -16,7 +16,33 @@ _Topological Data Analysis is sensitive to both large and small scale patterns t
 
 
 ### Results
-To test our implementation we take a look at a 3D point dataset of a lion (_lion_data.npy_). We can visualize the point cloud here:
+
+
+To test our implementation we take a look at two spirals in the following configuration:
+
+<p align="center">
+<img src="result_plots/spirals.png" width="400px"/>
+</p>
+
+Adding gaussian noise in the z dimension, we proceed use the x axis as a filter function and color the points accordingly (different filter functions will give us different compressions or views of the dataset), taking overlap parameter _p_ at 4% and number of bins _N_ equal to 7. 
+
+<p align="center">
+<img src="result_plots/spiral_coloring.png" width="600px"/>
+</p>
+
+Following is a visualization of the overlapping binning process based on the filter function. Nearest-Neighbour chain was used for the clustering.
+
+<p align="center">
+<img src="result_plots/spirals_anim.gif" width="500px"/>
+</p>
+
+After applying the Mapper algorithm, the two spirals have been successfully disentangled as can be seen in the graph representation.
+
+<p align="center">
+<img src="result_plots/spiral_graph.png" width="400px"/>
+</p>
+
+To further test our implementation we take a look at a more complex and subtle case: a 3D point dataset of a lion (_lion\_data.npy_). We can visualize the point cloud here:
 
 <p align="center">
 <img src="result_plots/3d.png" width="500px"/>
@@ -40,7 +66,7 @@ An edge is added between nodes if they share points in common, and thus this 3D 
 <img src="result_plots/graph.png" width="1000px"/>
 </p>
 
-We can see how the nodes are capturing the topology of the lion. For example we can clearly see that nodes 8 & 7 represent the ears, node 0 is the nose and nodes 22 & 23 the front paws. And as we can see below, node 29 is the fur of the tail with 27 & 28 being the back paws).
+We can see how the nodes are capturing the topology of the lion. For example we can clearly see that nodes 8 & 7 represent the ears, node 0 is the nose and nodes 22 & 23 the front paws. And as we can appreciate below, node 29 is the fur of the tail with 27 & 28 being the back paws).
 
 
 <p align="center">
@@ -48,29 +74,6 @@ We can see how the nodes are capturing the topology of the lion. For example we 
 </p>
 
 
-We can also take a look at a more abstract example of two spirals in the following configuration:
-
-<p align="center">
-<img src="result_plots/spirals.png" width="400px"/>
-</p>
-
-Add gaussian noise in the z dimension, we proceed analogously to the lion example. This time use the x axis as a filter function (different filter functions will give us different compressions or views of the dataset), taking 4% and 7 bins.
-
-<p align="center">
-<img src="result_plots/spiral_coloring.png" width="600px"/>
-</p>
-
-Following is a visualization of the overlapping binning process based on the filter function. Nearest-Neighbour chain was used for the clustering.
-
-<p align="center">
-<img src="result_plots/spirals_anim.gif" width="500px"/>
-</p>
-
-After applying the Mapper algorithm, the two spirals have been successfully disentangled as can be seen in the graph representation.
-
-<p align="center">
-<img src="result_plots/spiral_graph.png" width="400px"/>
-</p>
 
 
 

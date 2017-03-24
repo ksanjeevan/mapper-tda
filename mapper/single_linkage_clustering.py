@@ -9,32 +9,29 @@ try:
 except ImportError:
     import params_default as params
 
-####################
-# 1. Make curve fit (avoids noise) f to dist
-# 2. Find local minimums of f
-# 3. Define heuristics to choose opt. minima
-####################
+
 
 def find_opt_threshold(hist, bin_edges, limit=3):
+
+
+    infl_points = []
+
+    deltas = [hist[i+1] - hist[i] for i in range(len(hist)-1)]
     
-    sort_ind = np.lexsort((list(range(len(hist))), hist))
+    infl_points = [i for i in range(1, len(hist)-1) if np.sign(deltas[i]) != np.sign(deltas[i-1])]
+    infl_points = [0]+infl_points
+
+    if len(infl_points) == 1:
+        return bin_edges[np.argmin(deltas)+1]
+         
 
 
-    for i in sort_ind:
-        left = i
-        right = i
-        counter = 0
-        while left != 0 and right != len(sort_ind)-1:
-            left -= 1
-            right += 1
-            if hist[i] < hist[left] and hist[i] < hist[right]:
-                counter += 1
-            if counter == limit:
-                return bin_edges[i]
+    infl_deltas = [(hist[infl_points[i+1]] - hist[infl_points[i]], infl_points[i+1]) for i in range(len(infl_points)-1)][:-1]   
 
-    return bin_edges[-1]
-####################
+    thresh_ind = min(list(filter(lambda x: x[0]<0, infl_deltas)), key=lambda x: x[1])[1]
 
+    return bin_edges[thresh_ind]
+    
 
 
 
@@ -55,11 +52,16 @@ class SingleLinkageClustering(em.ClusteringTDA):
 
 
 
-    def run_clustering(self):
-
+    def run_clustering(self, lower_popul_bound=2):
+ 
         self.resolution, self.hist, self.bin_edges = self.compute_thresh()
 
         self.tad_algo()
+
+        for c in list(self.c_to_ind.keys()):
+            if len(self.c_to_ind[c]) <= lower_popul_bound:
+                self.c_to_ind.pop(c, None)
+        
         return self.c_to_ind
 
 
@@ -71,6 +73,7 @@ class SingleLinkageClustering(em.ClusteringTDA):
     def compute_thresh(self):
 
         flat_adj_matrix = pdist(self.data, metric='seuclidean', V=self.var_vec)
+
         hist, bin_edges = np.histogram(flat_adj_matrix, bins=self.k)
 
         opt_thresh = find_opt_threshold(hist, bin_edges, limit=3)
@@ -84,7 +87,7 @@ class SingleLinkageClustering(em.ClusteringTDA):
 
 
     def merge_clusters(self, neighbor_clusters, nodes):
-        #print set(self.ind_to_c.values()), self.c_to_ind.keys()
+        
         external_nodes = []    
 
         for c in neighbor_clusters:
@@ -92,7 +95,7 @@ class SingleLinkageClustering(em.ClusteringTDA):
             self.c_to_ind.pop(c, None)
 
 
-        #print external_nodes, nodes
+        
         return list(set(external_nodes)|set(nodes))
 
     def update_cluster_membership(self, cluster_name):
@@ -120,6 +123,82 @@ class SingleLinkageClustering(em.ClusteringTDA):
                 
                 cluster_name += 1
         
+
+
+class KNN(em.ClusteringTDA):
+
+
+    def __init__(self, data):
+        self.data = data
+        self.k = 8
+
+        self.var_vec = [v if v > 0 else 1. for v in np.var(data, axis=0)]
+        
+        self.indices = np.arange(len(data))
+        self.ind_to_c = {}
+        self.c_to_ind = {}
+
+
+
+    def run_clustering(self, lower_popul_bound=0):
+
+        self.knn_algo()
+
+
+        for c in list(self.c_to_ind.keys()):
+            if len(self.c_to_ind[c]) <= lower_popul_bound:
+                self.c_to_ind.pop(c, None)
+        
+        return self.c_to_ind
+
+
+    def make_plot(self, plot_name):
+        pass
+
+
+    def cdistance_norm(self, a, b):
+        return cdist(a, b, metric='seuclidean',V=self.var_vec)[0]
+
+
+    def merge_clusters(self, neighbor_clusters, nodes):
+        
+        external_nodes = []    
+
+        for c in neighbor_clusters:
+            external_nodes.extend( self.c_to_ind[c] )
+            self.c_to_ind.pop(c, None)
+
+
+        
+        return list(set(external_nodes)|set(nodes))
+
+    def update_cluster_membership(self, cluster_name):
+        return list(zip(self.c_to_ind[cluster_name], [cluster_name]*len(self.c_to_ind[cluster_name])))
+
+
+    def knn_algo(self):
+
+        cluster_name = 0
+
+        for i in self.indices:
+
+            if i not in self.ind_to_c:
+                
+                dists_i = self.cdistance_norm(self.data[i:i+1], self.data)
+                
+
+                nodes = self.indices[ np.argsort(dists_i)[:self.k] ][1:]
+
+                neighbor_clusters = set([self.ind_to_c[n] for n in nodes if n in self.ind_to_c])
+                
+                self.c_to_ind[cluster_name] = self.merge_clusters(neighbor_clusters, nodes)
+
+                clus_mbrship = self.update_cluster_membership(cluster_name)
+                
+                self.ind_to_c.update( clus_mbrship )
+                
+                cluster_name += 1
+
 
 
 if __name__ == '__main__':

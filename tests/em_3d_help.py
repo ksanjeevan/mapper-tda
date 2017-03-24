@@ -92,3 +92,76 @@ def plot_clustering_3d(obj, data_local, data_global, filename):
 
     plt.close()
 
+
+
+
+def make_spirals():
+
+    r_range = np.array([2**i for i in range(0,3)])
+
+
+    def polar_to_cart(r, the):
+        return (r*np.cos(the), r*np.sin(the))
+
+    def gen_spiral(shift=0, orient=0):
+        result = []
+
+        for i, r in enumerate(r_range):
+            step = .05/r
+            the_range = np.arange(0, -np.pi, -step) if (i+orient)%2!=0 else np.arange(np.pi, 0, -step)
+            
+            for the in the_range:
+                x, y = polar_to_cart(r, the)
+                x += shift
+
+                result.append( (x,y) )
+            
+            shift += r if (i+orient)%2!=0 else -r
+        return result
+
+    
+
+
+    total = gen_spiral(shift=-1, orient=1) + gen_spiral()
+
+    result = np.array(total)
+
+    fig = plt.figure(figsize=(10, 10))
+
+    plt.plot(result[:,0], result[:,1], 'ro', color='k',)
+
+    
+
+    fig.savefig('cosa.png', format='png')
+
+    plt.close()
+
+
+    result = []
+
+    z = np.random.normal
+
+
+    for v in total:
+        result.append([v[0], v[1], z(0, .1)])
+
+    np.save('spirals.npy', np.array(result))
+
+
+
+
+
+
+    
+
+
+
+    
+
+
+
+    
+
+
+
+

@@ -75,7 +75,7 @@ class ExploreMapper:
             cluster_obj = self.cluster_class(self.data[keys])
 
             clusters.append( cluster_obj )
-            
+
             c_to_ind = cluster_obj.run_clustering()
 
             global_cluster_names = {}
@@ -281,8 +281,6 @@ class FilterFuctionTDA(abc.ABC):
     @abc.abstractmethod
     def filter_func(self, *args):
         pass
-
-
 
 
 

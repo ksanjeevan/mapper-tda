@@ -29,3 +29,17 @@ class EccentricityP(em.FilterFuctionTDA):
             return self._inf_ecc(x, data)
         return self._fin_ecc(x, data)
 
+
+
+class AxisProj(em.FilterFuctionTDA):
+
+    def __init__(self, data, mode='x'):
+        self.mode = mode
+
+    def filter_func(self, x, data):
+        if self.mode == 'x':
+            return x[0][0]
+        elif self.mode == 'y':
+            return x[0][1]
+        else:
+            return x[0][self.mode]

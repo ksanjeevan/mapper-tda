@@ -12,26 +12,23 @@ except ImportError:
 
 
 def find_opt_threshold(hist, bin_edges, limit=3):
+     
+    sort_ind = np.lexsort((list(range(len(hist))), hist))
 
+    for i in sort_ind:
+     left = i
+     right = i
+     counter = 0
+     while left != 0 and right != len(sort_ind)-1:
+         left -= 1
+         right += 1
+         if hist[i] < hist[left] and hist[i] < hist[right]:
+             counter += 1
+         if counter == limit:
+             return bin_edges[i]
 
-    infl_points = []
+    return bin_edges[-1]
 
-    deltas = [hist[i+1] - hist[i] for i in range(len(hist)-1)]
-    
-    infl_points = [i for i in range(1, len(hist)-1) if np.sign(deltas[i]) != np.sign(deltas[i-1])]
-    infl_points = [0]+infl_points
-
-    if len(infl_points) == 1:
-        return bin_edges[np.argmin(deltas)+1]
-         
-
-
-    infl_deltas = [(hist[infl_points[i+1]] - hist[infl_points[i]], infl_points[i+1]) for i in range(len(infl_points)-1)][:-1]   
-
-    thresh_ind = min(list(filter(lambda x: x[0]<0, infl_deltas)), key=lambda x: x[1])[1]
-
-    return bin_edges[thresh_ind]
-    
 
 
 
@@ -142,7 +139,7 @@ class NNC(em.ClusteringTDA):
 
     def run_clustering(self, lower_popul_bound=0):
 
-        self.knn_algo()
+        self.nnc_algo()
 
 
         for c in list(self.c_to_ind.keys()):

@@ -212,9 +212,7 @@ class ExploreMapper:
             for node, indices in clusters.items():
                 color = node_colors[node]
                 ax.scatter(*np.mean(self.data[indices], axis=0), s=200, c=color, lw=0, alpha=.4)
-
                 c_to_centroid[node] = np.mean(self.data[indices], axis=0)
-
 
         for e in edges:
             e1, e2 = e

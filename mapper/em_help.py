@@ -50,7 +50,7 @@ def plot_graph(G, filename='prova.png', values=None, colorbar_obj=None):
     plt.title("|V| = %d, |E| = %d"%(len(G.nodes()), len(G.edges())))
     colorbar_obj.set_array(color_nodes)
     plt.colorbar(colorbar_obj)
-
+    plt.axis('off')
     fig.savefig(filename, format='png')
     plt.close()
 

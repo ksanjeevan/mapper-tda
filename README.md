@@ -1,6 +1,12 @@
 # TDA
 ## Mapper implementation (Topological Data Analysis for high dimensional dataset exploration)
 
+### Usage
+Use tests/ as an example/template. Run:
+
+```bash
+python3 tests/test.py
+```
 
 ### Introduction
 

@@ -44,7 +44,6 @@ def read_3d_obj(fname="lion_data.npy", fname_obj="lion-reference.obj"):
         x,y,z = -a[:,0],a[:,2],a[:,1]
         data = np.array(list(zip(x,y,z)))
         
-
         np.save(fname, data)
 
         return data

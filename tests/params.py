@@ -9,7 +9,7 @@ DATASET_DIM = 3
 # Code Path 
 
 EM_CODE_PATH = ''
-DATA_PATH = ''
+DATA_PATH = os.getcwd() + '/tests/'
 
 # Graph Plot Parameters
 
